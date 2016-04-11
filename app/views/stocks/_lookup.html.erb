@@ -26,7 +26,7 @@
          <span class="label label-default">
              You already added
              <% if !current_user.under_stock_limit? %>
-             5 stocks
+             12 stocks
              <% end %>
              <% if current_user.stock_already_added?(@stock.ticker) %>
              this stock

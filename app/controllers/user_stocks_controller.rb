@@ -24,6 +24,7 @@ class UserStocksController < ApplicationController
   # POST /user_stocks
   # POST /user_stocks.json
   def create
+  if current_user.can_add_stock?(params[:stock_ticker])
     if params[:stock_id].present?
       @user_stock = UserStock.new(stock_id: params[:stock_id],user: current_user)
     else
@@ -40,7 +41,8 @@ class UserStocksController < ApplicationController
         end
       end
     end
-
+  end
+    if @user_stock 
     respond_to do |format|
       if @user_stock.save
         format.html { redirect_to my_portfolio_path, 
@@ -50,6 +52,9 @@ class UserStocksController < ApplicationController
         format.html { render :new }
         format.json { render json: @user_stock.errors, status: :unprocessable_entity }
       end
+    end
+  else
+    redirect_to my_portfolio_path
     end
   end
 
@@ -80,7 +85,7 @@ class UserStocksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user_stock
-      @user_stock = UserStock.find(params[:id])
+       @user_stock = current_user.user_stocks.where(stock_id: params[:id]).first
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
