@@ -37,7 +37,7 @@ class UserStocksController < ApplicationController
           @user_stock = UserStock.new(user: current_user, stock: stock)
         else
           @user_stock = nil
-          flash[:error] = "The stock you are lookin gfo is not available"
+          flash[:error] = "The stock you are looking for is not available"
         end
       end
     end
@@ -85,7 +85,7 @@ class UserStocksController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user_stock
-       @user_stock = current_user.user_stocks.where(stock_id: params[:id]).first
+       @user_stock = UserStock.where(stock_id: params[:id], user_id: current_user.id).first
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
